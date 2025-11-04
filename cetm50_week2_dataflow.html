@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Data Analysis - Teaching Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .dimension-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border-top: 4px solid #667eea;
+        }
+
+        .dimension-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .dimension-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .dimension-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .approach-box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .approach-box h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            padding: 15px 15px 15px 60px;
+            margin: 15px 0;
+            background: white;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .interactive-demo h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .scenario-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .scenario-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .scenario-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .scenario-btn.active {
+            background: #764ba2;
+            color: white;
+        }
+
+        .scenario-content {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .scenario-content.active {
+            display: block;
+        }
+
+        .key-takeaway {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .key-takeaway h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .dimension-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Root Data Analysis Framework</h1>
+        <p class="subtitle">A Comprehensive Guide for Data Investigation | Traffic & Cybercrime Investigation Examples</p>
+
+        <div class="section">
+            <h2>📊 The Five Core Dimensions</h2>
+            <p>Every data analysis should examine these fundamental aspects:</p>
+            
+            <div class="dimension-grid">
+                <div class="dimension-card">
+                    <div class="dimension-icon">👥</div>
+                    <h3>WHO (People)</h3>
+                    <p><strong>Actors & Stakeholders</strong></p>
+                    <ul>
+                        <li>Who is involved?</li>
+                        <li>Who is affected?</li>
+                        <li>Who made decisions?</li>
+                        <li>User demographics</li>
+                    </ul>
+                </div>
+
+                <div class="dimension-card">
+                    <div class="dimension-icon">📍</div>
+                    <h3>WHERE (Location)</h3>
+                    <p><strong>Geographic & System Context</strong></p>
+                    <ul>
+                        <li>Physical location</li>
+                        <li>System environment</li>
+                        <li>Geographic patterns</li>
+                        <li>Regional variations</li>
+                    </ul>
+                </div>
+
+                <div class="dimension-card">
+                    <div class="dimension-icon">⏰</div>
+                    <h3>WHEN (Time)</h3>
+                    <p><strong>Temporal Patterns</strong></p>
+                    <ul>
+                        <li>When did it occur?</li>
+                        <li>Duration & frequency</li>
+                        <li>Time-based trends</li>
+                        <li>Sequences & order</li>
+                    </ul>
+                </div>
+
+                <div class="dimension-card">
+                    <div class="dimension-icon">📌</div>
+                    <h3>WHAT (Event)</h3>
+                    <p><strong>The Occurrence</strong></p>
+                    <ul>
+                        <li>What happened?</li>
+                        <li>What changed?</li>
+                        <li>Specific actions</li>
+                        <li>Outcomes & results</li>
+                    </ul>
+                </div>
+
+                <div class="dimension-card">
+                    <div class="dimension-icon">🔍</div>
+                    <h3>WHY (Triggers)</h3>
+                    <p><strong>Root Causes</strong></p>
+                    <ul>
+                        <li>What triggered it?</li>
+                        <li>Underlying causes</li>
+                        <li>Contributing factors</li>
+                        <li>Motivations</li>
+                    </ul>
+                </div>
+
+                <div class="dimension-card">
+                    <div class="dimension-icon">⚙️</div>
+                    <h3>HOW (Mechanism)</h3>
+                    <p><strong>Process & Method</strong></p>
+                    <ul>
+                        <li>How did it happen?</li>
+                        <li>Process flow</li>
+                        <li>Methodology</li>
+                        <li>Technical details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Analysis Starting Points by Context</h2>
+            
+            <div class="approach-box">
+                <h3>🚨 Incident / Problem Analysis</h3>
+                <div class="flow-arrow">↓</div>
+                <p><strong>Recommended Order:</strong> Event → Time → People → Location → Trigger Points</p>
+                <p><em>Example: System outage, security breach, product failure</em></p>
+            </div>
+
+            <div class="approach-box">
+                <h3>👤 Behavioral / Social Analysis</h3>
+                <div class="flow-arrow">↓</div>
+                <p><strong>Recommended Order:</strong> People → Location → Time → Event → Trigger Points</p>
+                <p><em>Example: User behavior study, customer churn, social trends</em></p>
+            </div>
+
+            <div class="approach-box">
+                <h3>📈 Pattern Detection</h3>
+                <div class="flow-arrow">↓</div>
+                <p><strong>Recommended Order:</strong> Time → Location → Event → People → Trigger Points</p>
+                <p><em>Example: Sales trends, seasonal patterns, anomaly detection</em></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Practical 4-Step Approach</h2>
+            <ol class="step-list">
+                <li>
+                    <strong>Define Your Objective</strong>
+                    <p>What specific question are you trying to answer? What problem needs solving?</p>
+                </li>
+                <li>
+                    <strong>Choose Primary Dimension</strong>
+                    <p>Select the dimension with the clearest variation or most relevant to your objective</p>
+                </li>
+                <li>
+                    <strong>Layer Secondary Dimensions</strong>
+                    <p>Cross-reference with other dimensions to identify patterns and correlations</p>
+                </li>
+                <li>
+                    <strong>Drill Down to Root Causes</strong>
+                    <p>Once you've narrowed the scope, investigate trigger points and underlying causes</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>➕ Additional Dimensions to Consider</h2>
+            <div class="dimension-grid">
+                <div class="dimension-card">
+                    <h3>📊 Volume/Scale</h3>
+                    <p>How much? How many? Magnitude of the event or phenomenon</p>
+                </div>
+                <div class="dimension-card">
+                    <h3>🌐 Context</h3>
+                    <p>Surrounding conditions, environmental factors, external influences</p>
+                </div>
+                <div class="dimension-card">
+                    <h3>🔗 Relationships</h3>
+                    <p>Connections between entities, dependencies, correlations</p>
+                </div>
+                <div class="dimension-card">
+                    <h3>📉 Changes/Deltas</h3>
+                    <p>What shifted from baseline? Deviations from normal patterns</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚦 Special Focus: Traffic Investigation Analysis</h2>
+            <p>Traffic investigations require special attention to multiple interconnected factors. Here's how to apply the framework:</p>
+            
+            <div class="approach-box">
+                <h3>🚨 Accident Investigation Framework</h3>
+                <p><strong>Primary Focus:</strong> Event → Time → Location → People → Environmental Triggers</p>
+                <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Critical Data Points:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Physical Evidence:</strong> Skid marks, vehicle damage, debris field, road conditions</li>
+                        <li><strong>Environmental:</strong> Weather, visibility, lighting, road surface conditions</li>
+                        <li><strong>Human Factors:</strong> Driver experience, age, condition (fatigue, impairment), reaction time</li>
+                        <li><strong>Vehicle Factors:</strong> Mechanical condition, maintenance history, safety features</li>
+                        <li><strong>Infrastructure:</strong> Road design, signage, traffic control devices</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="approach-box">
+                <h3>📊 Traffic Pattern Analysis Framework</h3>
+                <p><strong>Primary Focus:</strong> Time → Location → Volume → People Behavior</p>
+                <div style="background: rgba(118, 75, 162, 0.1); padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Key Metrics to Track:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Temporal Patterns:</strong> Peak hours, seasonal variations, day-of-week trends</li>
+                        <li><strong>Volume Metrics:</strong> Vehicles per hour, pedestrian counts, traffic density</li>
+                        <li><strong>Flow Characteristics:</strong> Speed profiles, queue lengths, delay times</li>
+                        <li><strong>Origin-Destination:</strong> Where traffic comes from and goes to</li>
+                        <li><strong>Bottleneck Analysis:</strong> Capacity constraints, choke points</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="approach-box">
+                <h3>🎯 Violation Pattern Investigation</h3>
+                <p><strong>Primary Focus:</strong> Location → Time → People → Root Causes</p>
+                <div style="background: rgba(255, 193, 7, 0.1); padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Investigation Elements:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Hot Spot Mapping:</strong> Geographic clustering of violations</li>
+                        <li><strong>Driver Demographics:</strong> Age, local vs. non-local, violation history</li>
+                        <li><strong>Infrastructure Gaps:</strong> Missing signage, poor visibility, confusing layouts</li>
+                        <li><strong>Enforcement Data:</strong> Citation patterns, officer deployment</li>
+                        <li><strong>Contributing Factors:</strong> Road design issues, traffic control failures</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 15px; border-left: 5px solid #dc3545;">
+                <h3 style="color: #dc3545; margin-bottom: 10px;">⚡ The 5 E's of Traffic Safety</h3>
+                <p>Always consider these interconnected factors in traffic investigations:</p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Engineering:</strong> Road design, traffic control, infrastructure</li>
+                    <li><strong>Enforcement:</strong> Police presence, citations, compliance monitoring</li>
+                    <li><strong>Education:</strong> Driver training, awareness campaigns, signage</li>
+                    <li><strong>Emergency Response:</strong> Response times, medical care, rescue operations</li>
+                    <li><strong>Environment:</strong> Weather, lighting, seasonal factors, land use</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔐 Special Focus: Internet Crime Investigation</h2>
+            <p>Digital crime investigations require systematic analysis of technical evidence, user behavior, and attack vectors. Here's how to apply the framework:</p>
+            
+            <div class="approach-box">
+                <h3>🚨 Cybercrime Incident Response Framework</h3>
+                <p><strong>Primary Focus:</strong> Event → Time → How → Where → Who → Why</p>
+                <div style="background: rgba(102, 126, 234, 0.1); padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Critical Investigation Steps:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Identification:</strong> Detect and confirm the incident; determine scope and impact</li>
+                        <li><strong>Containment:</strong> Isolate affected systems; prevent further damage</li>
+                        <li><strong>Evidence Preservation:</strong> Create forensic images; maintain chain of custody</li>
+                        <li><strong>Analysis:</strong> Examine logs, network traffic, malware; reconstruct attack timeline</li>
+                        <li><strong>Attribution:</strong> Trace IP addresses, identify threat actors, analyze tactics</li>
+                        <li><strong>Recovery:</strong> Restore systems, implement security improvements</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="approach-box">
+                <h3>🔍 Digital Evidence Collection</h3>
+                <p><strong>Key Evidence Sources in Cybercrime</strong></p>
+                <div style="background: rgba(118, 75, 162, 0.1); padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Technical Evidence Types:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Network Data:</strong> Firewall logs, IDS/IPS alerts, packet captures (PCAP), DNS queries</li>
+                        <li><strong>System Logs:</strong> Authentication attempts, file access records, process execution, registry changes</li>
+                        <li><strong>Email Evidence:</strong> Headers (IP addresses, routing), attachments, phishing indicators</li>
+                        <li><strong>Endpoint Data:</strong> Browser history, downloaded files, installed programs, USB device logs</li>
+                        <li><strong>Cloud/External:</strong> Cloud service logs, API calls, third-party authentication records</li>
+                        <li><strong>Financial:</strong> Transaction records, cryptocurrency wallet addresses, payment systems</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="approach-box">
+                <h3>🎯 Attack Vector Analysis</h3>
+                <p><strong>Primary Focus:</strong> How → Where → Who → Why</p>
+                <div style="background: rgba(255, 193, 7, 0.1); padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Common Attack Patterns:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>Phishing/Social Engineering:</strong> Analyze email campaigns, fake domains, credential harvesting</li>
+                        <li><strong>Malware Analysis:</strong> Identify type (ransomware, trojan, spyware), examine code, determine capabilities</li>
+                        <li><strong>Network Intrusion:</strong> Entry point identification, lateral movement tracking, persistence mechanisms</li>
+                        <li><strong>Data Exfiltration:</strong> Volume analysis, destination tracking, encryption detection</li>
+                        <li><strong>Account Compromise:</strong> Brute force attempts, credential stuffing, session hijacking</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 15px; border-left: 5px solid #28a745;">
+                <h3 style="color: #28a745; margin-bottom: 10px;">🛡️ The 4 Pillars of Cyber Investigation</h3>
+                <p>Essential elements for successful digital crime investigation:</p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Timeline Reconstruction:</strong> Build precise sequence of events using timestamps across all systems</li>
+                    <li><strong>Attribution & Intelligence:</strong> Link attacks to threat actors using TTPs (Tactics, Techniques, Procedures), infrastructure, and patterns</li>
+                    <li><strong>Technical Analysis:</strong> Deep dive into malware, exploits, vulnerabilities, and attack mechanisms</li>
+                    <li><strong>Legal & Compliance:</strong> Maintain evidence integrity, follow data privacy laws, prepare for prosecution</li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(220, 53, 69, 0.1); padding: 20px; border-radius: 10px; margin-top: 15px;">
+                <h3 style="color: #dc3545; margin-bottom: 10px;">⚠️ Critical Considerations for Digital Investigations</h3>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Volatility:</strong> Some evidence (RAM, network connections) disappears when systems shut down</li>
+                    <li><strong>Chain of Custody:</strong> Document every person who handled evidence and when</li>
+                    <li><strong>Time Zone Challenges:</strong> Normalize all timestamps to UTC; account for system clock manipulation</li>
+                    <li><strong>Encryption:</strong> Modern attacks use encryption to hide activities; focus on metadata when content is unavailable</li>
+                    <li><strong>Attribution Difficulty:</strong> VPNs, TOR, proxies, and stolen credentials complicate tracking</li>
+                    <li><strong>Legal Jurisdictions:</strong> International cybercrime crosses borders; coordinate with appropriate agencies</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <h2>💡 Interactive Scenario Practice</h2>
+            <p>Click on a scenario to see how to apply the framework:</p>
+            
+            <div class="scenario-selector">
+                <button class="scenario-btn active" onclick="showScenario(1)">🚨 Website Crash</button>
+                <button class="scenario-btn" onclick="showScenario(2)">📉 Sales Drop</button>
+                <button class="scenario-btn" onclick="showScenario(3)">👥 User Churn</button>
+                <button class="scenario-btn" onclick="showScenario(4)">🚗 Traffic Accident</button>
+                <button class="scenario-btn" onclick="showScenario(5)">🚦 Congestion Pattern</button>
+                <button class="scenario-btn" onclick="showScenario(6)">⚠️ Speeding Violations</button>
+                <button class="scenario-btn" onclick="showScenario(7)">🛣️ Road Safety Issue</button>
+                <button class="scenario-btn" onclick="showScenario(8)">🔐 Internet Crime</button>
+            </div>
+
+            <div class="scenario-content active" id="scenario1">
+                <h3>Scenario: Website Crashed During Peak Hours</h3>
+                <p><strong>Starting Point:</strong> Event (What happened)</p>
+                <ol>
+                    <li><strong>WHAT:</strong> Website became unresponsive at 2:00 PM</li>
+                    <li><strong>WHEN:</strong> During peak shopping hours, lasted 45 minutes</li>
+                    <li><strong>WHO:</strong> Affected 10,000+ customers, handled by DevOps team</li>
+                    <li><strong>WHERE:</strong> Primary server in US-East region</li>
+                    <li><strong>WHY:</strong> Database connection pool exhausted due to unexpected traffic spike</li>
+                    <li><strong>HOW:</strong> Automatic scaling didn't trigger; manual intervention required</li>
+                </ol>
+            </div>
+
+            <div class="scenario-content" id="scenario2">
+                <h3>Scenario: 30% Sales Drop in Q3</h3>
+                <p><strong>Starting Point:</strong> Time (Pattern detection)</p>
+                <ol>
+                    <li><strong>WHEN:</strong> Q3 2024 (July-September), gradual decline</li>
+                    <li><strong>WHERE:</strong> Primarily in Western region stores</li>
+                    <li><strong>WHAT:</strong> 30% decrease in revenue, 25% fewer transactions</li>
+                    <li><strong>WHO:</strong> Existing customers buying less, fewer new customers</li>
+                    <li><strong>WHY:</strong> New competitor opened nearby + economic downturn + product line aged</li>
+                    <li><strong>HOW:</strong> Customers shifted to competitor's lower prices and modern offerings</li>
+                </ol>
+            </div>
+
+            <div class="scenario-content" id="scenario3">
+                <h3>Scenario: Mobile App User Churn Increased</h3>
+                <p><strong>Starting Point:</strong> People (Behavioral analysis)</p>
+                <ol>
+                    <li><strong>WHO:</strong> Users aged 25-35, primarily Android users</li>
+                    <li><strong>WHERE:</strong> Urban areas, users with older device models</li>
+                    <li><strong>WHEN:</strong> After version 3.2 update, over 2 weeks</li>
+                    <li><strong>WHAT:</strong> 40% increase in uninstalls, negative reviews about performance</li>
+                    <li><strong>WHY:</strong> New features caused app to be slow on older devices</li>
+                    <li><strong>HOW:</strong> Memory-intensive animations and unoptimized code</li>
+                </ol>
+            </div>
+
+            <div class="scenario-content" id="scenario4">
+                <h3>🚗 Scenario: Multi-Vehicle Traffic Accident Investigation</h3>
+                <p><strong>Starting Point:</strong> Event (Incident analysis)</p>
+                <ol>
+                    <li><strong>WHAT:</strong> 5-vehicle collision on highway, 3 injuries, significant property damage</li>
+                    <li><strong>WHEN:</strong> Tuesday 7:45 AM during rush hour, foggy conditions</li>
+                    <li><strong>WHERE:</strong> Highway 101 northbound, Mile Marker 47, construction zone</li>
+                    <li><strong>WHO:</strong> 2 commercial trucks, 3 passenger vehicles; drivers aged 28-55; construction crew nearby</li>
+                    <li><strong>WHY:</strong> Sudden braking by lead vehicle + reduced visibility (fog) + following too closely + wet pavement</li>
+                    <li><strong>HOW:</strong> Chain reaction: Lead vehicle braked for construction equipment, second vehicle couldn't stop in time, triggered pile-up</li>
+                    <li><strong>ADDITIONAL:</strong> Speed: 55-65 mph in 45 mph construction zone; No traffic warning signs visible in fog</li>
+                </ol>
+            </div>
+
+            <div class="scenario-content" id="scenario5">
+                <h3>🚦 Scenario: Daily Traffic Congestion Pattern Analysis</h3>
+                <p><strong>Starting Point:</strong> Time (Pattern detection)</p>
+                <ol>
+                    <li><strong>WHEN:</strong> Every weekday 4:30-6:30 PM, worsening over past 6 months</li>
+                    <li><strong>WHERE:</strong> Main Street & Oak Avenue intersection, downtown business district</li>
+                    <li><strong>WHAT:</strong> Average delay increased from 5 to 18 minutes; backup extends 2 miles; 2,500 vehicles/hour</li>
+                    <li><strong>WHO:</strong> Commuters leaving downtown offices, school bus routes, delivery trucks</li>
+                    <li><strong>WHY:</strong> New office building added 800 employees + traffic light timing outdated + left-turn lane too short (holds only 6 cars)</li>
+                    <li><strong>HOW:</strong> Bottle-neck at intersection: vehicles waiting to turn left block through-traffic; signal cycles don't match current traffic volume</li>
+                    <li><strong>VOLUME:</strong> Traffic increased 45% but infrastructure unchanged since 2015</li>
+                </ol>
+            </div>
+
+            <div class="scenario-content" id="scenario6">
+                <h3>⚠️ Scenario: Speeding Violation Pattern in School Zone</h3>
+                <p><strong>Starting Point:</strong> Location (Geographic analysis)</p>
+                <ol>
+                    <li><strong>WHERE:</strong> Elementary school zone on Elm Street (2-block area), residential neighborhood</li>
+                    <li><strong>WHAT:</strong> 847 speeding violations recorded in one month; speeds 15-25 mph over 20 mph limit</li>
+                    <li><strong>WHEN:</strong> Peak violations: 7:30-8:15 AM (morning drop-off) and 3:00-3:45 PM (pickup time)</li>
+                    <li><strong>WHO:</strong> 65% local residents (shortcuts through neighborhood), 35% commuters; ages 25-50</li>
+                    <li><strong>WHY:</strong> School zone lights malfunction frequently + signs obscured by tree branches + street is straight with good visibility (encourages higher speeds) + no speed bumps</li>
+                    <li><strong>HOW:</strong> Drivers entering from Main Street maintain highway speeds; lack of physical traffic calming measures; inadequate enforcement presence</li>
+                    <li><strong>CONTEXT:</strong> Near-miss incidents with children reported 3 times in past month; parent complaints increased 400%</li>
+                </ol>
+            </div>
+
+            <div class="scenario-content" id="scenario7">
+                <h3>🛣️ Scenario: Recurring Road Safety Issue - Curve Accidents</h3>
+                <p><strong>Starting Point:</strong> Location (High-incident area analysis)</p>
+                <ol>
+                    <li><strong>WHERE:</strong> Sharp curve on County Road 45, rural area, 2-lane undivided road</li>
+                    <li><strong>WHAT:</strong> 12 accidents in 18 months (8 single-vehicle, 4 head-on); 2 fatalities, 7 serious injuries</li>
+                    <li><strong>WHEN:</strong> 75% occur between 6 PM - 2 AM; 60% on weekends; 40% during rain/fog conditions</li>
+                    <li><strong>WHO:</strong> Drivers aged 18-30 (70%); mix of locals and tourists; mostly young male drivers</li>
+                    <li><strong>WHY:</strong> Sharp 35-degree curve after long straight section + insufficient warning signs + no lighting + poor drainage causes standing water + speed limit too high (50 mph) for curve design</li>
+                    <li><strong>HOW:</strong> Drivers maintain high speed from straight section, underestimate curve sharpness; vehicles cross center line or run off road; wet conditions reduce traction</li>
+                    <li><strong>CHANGES:</strong> Traffic volume increased 30% since new housing development opened 2 miles away; recommended curve speed: 25 mph but not posted</li>
+                </ol>
+            </div>
+
+            <div class="scenario-content" id="scenario8">
+                <h3>🔐 Scenario: Corporate Phishing Attack & Data Breach</h3>
+                <p><strong>Starting Point:</strong> Event (Cybercrime incident investigation)</p>
+                <ol>
+                    <li><strong>WHAT:</strong> Unauthorized access to employee database; 15,000 customer records stolen (names, emails, phone numbers, purchase history); ransomware deployed on 47 workstations</li>
+                    <li><strong>WHEN:</strong> Initial phishing email sent Friday 3:42 PM; breach occurred Saturday 2:15 AM; discovered Monday 8:30 AM; data exfiltrated over 36-hour period</li>
+                    <li><strong>WHERE:</strong> Attack originated from IP addresses in Eastern Europe (3 different countries); targeted company's Dallas headquarters network; accessed via VPN connection from compromised credentials</li>
+                    <li><strong>WHO:</strong> 
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li><strong>Victims:</strong> HR manager (clicked phishing link), 15,000 customers, 47 employees with locked computers</li>
+                            <li><strong>Attackers:</strong> Organized cybercrime group; used stolen identity to register domain; communicated via encrypted channels</li>
+                            <li><strong>Discovered by:</strong> IT security analyst noticed unusual network traffic spike</li>
+                        </ul>
+                    </li>
+                    <li><strong>WHY (Root Causes):</strong>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li>Phishing email appeared legitimate (spoofed CEO's email address)</li>
+                            <li>No multi-factor authentication (MFA) on VPN access</li>
+                            <li>Outdated employee security training (last done 18 months ago)</li>
+                            <li>Database lacked encryption at rest</li>
+                            <li>Weekend monitoring gaps - automated alerts not configured</li>
+                            <li>HR manager's credentials had excessive database permissions</li>
+                        </ul>
+                    </li>
+                    <li><strong>HOW (Attack Chain):</strong>
+                        <ul style="margin-left: 20px; margin-top: 5px;">
+                            <li><strong>Stage 1:</strong> Spear-phishing email with urgent message about "payroll discrepancy"</li>
+                            <li><strong>Stage 2:</strong> HR manager clicked link, entered credentials on fake login page</li>
+                            <li><strong>Stage 3:</strong> Attackers used stolen credentials to access VPN during off-hours</li>
+                            <li><strong>Stage 4:</strong> Lateral movement through network to locate database server</li>
+                            <li><strong>Stage 5:</strong> Data exfiltration via encrypted connection to external server</li>
+                            <li><strong>Stage 6:</strong> Ransomware deployed to cover tracks and create distraction</li>
+                        </ul>
+                    </li>
+                    <li><strong>DIGITAL EVIDENCE:</strong> Email headers, server logs, network traffic captures (PCAP files), VPN connection logs, file access timestamps, ransom note text file, Bitcoin wallet address</li>
+                    <li><strong>IMPACT:</strong> $850,000 estimated loss (downtime, forensics, notification costs, potential fines); 3-day business disruption; regulatory investigation initiated; reputational damage</li>
+                </ol>
+                <div style="background: rgba(220, 53, 69, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🔍 Investigation Actions Taken:</strong>
+                    <ul style="margin-top: 10px;">
+                        <li>Isolated affected systems from network</li>
+                        <li>Preserved forensic images of compromised machines</li>
+                        <li>Analyzed email headers and malicious links</li>
+                        <li>Reviewed access logs and authentication records</li>
+                        <li>Traced IP addresses and identified attack infrastructure</li>
+                        <li>Coordinated with law enforcement and FBI Cyber Division</li>
+                        <li>Notified affected customers per data breach laws</li>
+                        <li>Implemented emergency security measures (forced password resets, enabled MFA)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="key-takeaway">
+            <h3>🎓 Key Takeaway for Students</h3>
+            <p><strong>There's no single "correct" starting point.</strong> The best approach depends on your specific objective and the nature of the data problem. Always begin by clearly defining what you're trying to learn, then choose the dimension that provides the clearest path to insights.</p>
+            <p style="margin-top: 15px;"><strong>For Traffic Investigations:</strong> Remember that traffic incidents are multi-factorial. A thorough investigation examines the interaction between road users (people), infrastructure (location), timing (when), vehicle conditions, environmental factors, and human behavior. Always look for patterns across multiple dimensions before drawing conclusions.</p>
+            <p style="margin-top: 15px;"><strong>For Internet Crime Investigations:</strong> Digital forensics requires precise timeline reconstruction and correlation of technical evidence across multiple systems. Focus on the "How" (attack methodology) early in your investigation, preserve volatile evidence immediately, and maintain strict chain of custody. Remember that attribution is challenging—focus on documenting technical indicators even when the perpetrator's identity remains unknown.</p>
+            <p style="margin-top: 15px;"><em>As you gain experience, you'll develop intuition for which starting point works best for different types of analysis.</em></p>
+        </div>
+    </div>
+
+    <script>
+        function showScenario(num) {
+            // Hide all scenarios
+            document.querySelectorAll('.scenario-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected scenario
+            document.getElementById('scenario' + num).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
